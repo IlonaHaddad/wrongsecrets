@@ -8,11 +8,12 @@ import requests
 def print_file(s: str, flag: bool) -> None:
     # True for MD , false for HTML file
     if flag:
-        f = open("contributors_file.md", "w")
+        with open("contributors_file.md", "w") as f: as f:
+                f.write(s)
+      with return
+    with open("contributors_file.html", "w") as f:
+     as f:
         f.write(s)
-        return
-    f = open("contributors_file.html", "w")
-    f.write(s)
 
 
 def print_md(user_list: dict, label="") -> str:
