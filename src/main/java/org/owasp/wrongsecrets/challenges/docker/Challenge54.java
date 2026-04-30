@@ -5,6 +5,7 @@ import static org.owasp.wrongsecrets.Challenges.ErrorResponses.DECRYPTION_ERROR;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -36,7 +37,8 @@ public class Challenge54 extends FixedAnswerChallenge {
       MessageDigest sha = MessageDigest.getInstance("SHA-256");
       byte[] keyBytes = sha.digest(passphrase.getBytes(StandardCharsets.UTF_8));
       SecretKeySpec secretKey = new SecretKeySpec(keyBytes, "AES");
-      byte[] ivBytes = "0123456789abcdef".getBytes(StandardCharsets.UTF_8); // 16 chars = 128 bits
+      byte[] ivBytes = new byte[16];
+      new SecureRandom().nextBytes(ivBytes);
       IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
 
       Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
