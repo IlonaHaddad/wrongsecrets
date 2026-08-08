@@ -2,6 +2,7 @@ package org.owasp.wrongsecrets.challenges.docker;
 
 import com.google.common.base.Strings;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.regex.Matcher;
@@ -22,6 +23,7 @@ public class Challenge13 implements Challenge {
 
   private final String plainText;
   private final String cipherText;
+  private static final SecureRandom secureRandom = new SecureRandom();
 
   /** {@inheritDoc} */
   @Override
@@ -63,10 +65,7 @@ public class Challenge13 implements Challenge {
       int gcmTagLengthInBytes = 16;
       int gcmIVLengthInBytes = 12;
       byte[] initializationVector = new byte[gcmIVLengthInBytes];
-      Arrays.fill(
-          initializationVector,
-          (byte) 0); // done for "poor-man's convergent encryption", please check actual convergent
-      // cryptosystems for better implementation ;-)
+      secureRandom.nextBytes(initializationVector);
       GCMParameterSpec gcmParameterSpec =
           new GCMParameterSpec(gcmTagLengthInBytes * 8, initializationVector);
       cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmParameterSpec);
